@@ -15,35 +15,20 @@
 <a href="#15" id="15">15</a>
 <a href="#16" id="16">16</a>
 <a href="#17" id="17">17</a>
-<a href="#18" id="18">18</a>
-<a href="#19" id="19">19</a>
-<a href="#20" id="20">20</a>
-<a href="#21" id="21">21</a>
-<a href="#22" id="22">22</a>
-<a href="#23" id="23">23</a>
-<a href="#24" id="24">24</a>
-</pre></div><pre class="rust"><code><span class="attr">#![allow(unused)]
+</pre></div><pre class="rust"><code>
 
-</span><span class="doccomment">/// use sbi call to putchar in console (qemu uart handler)
-</span><span class="kw">pub fn </span>console_putchar(c: usize) {
+<span class="kw">pub fn </span>console_putchar(c: usize) {
     <span class="attr">#[allow(deprecated)]
     </span>sbi_rt::legacy::console_putchar(c);
 }
 
-<span class="doccomment">/// use sbi call to getchar from console (qemu uart handler)
-</span><span class="kw">pub fn </span>console_getchar() -&gt; usize {
-    <span class="attr">#[allow(deprecated)]
-    </span>sbi_rt::legacy::console_getchar()
-}
-
-<span class="doccomment">/// use sbi call to shutdown the kernel
-</span><span class="kw">pub fn </span>shutdown(failure: bool) -&gt; ! {
+<span class="kw">pub fn </span>shutdown(failure: bool) -&gt; ! {
     <span class="kw">use </span>sbi_rt::{system_reset, NoReason, Shutdown, SystemFailure};
+
     <span class="kw">if </span>!failure {
         system_reset(Shutdown, NoReason);
     } <span class="kw">else </span>{
         system_reset(Shutdown, SystemFailure);
     }
     <span class="macro">unreachable!</span>()
-}
-</code></pre></div></section></main></body></html>
+}</code></pre></div></section></main></body></html>
