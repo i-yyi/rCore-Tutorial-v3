@@ -4,18 +4,20 @@
 
 use core::arch::global_asm;
 
-#[macro_use]
-mod console;
 
 mod lang_items;
 mod sbi;
+
+#[macro_use]
+mod log;
+#[macro_use]
+mod console;
 
 global_asm!(include_str!("entry.asm"));
 
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss();
-    println!("Hello, world!");
     extern "C" {
         fn s_text();
         fn e_text();
@@ -23,11 +25,11 @@ pub fn rust_main() -> ! {
         fn e_data();
     }
 
-    log!(info, ".text [{:#x}, {:#x}]", s_text as usize, e_text as usize);
-    log!(debug, ".rodata [{:#x}, {:#x}]", s_data as usize, e_data as usize);
-    log!(error, "test error");
+    INFO!(".text [{:#x}, {:#x}]", s_text as usize, e_text as usize);
+    INFO!(".rodata [{:#x}, {:#x}]", s_data as usize, e_data as usize);
+    INFO!("test error {}", 1);
 
-    panic!("shut down!");
+    panic!("shutdown!");
 }
 
 fn clear_bss() {
