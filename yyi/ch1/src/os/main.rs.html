@@ -40,24 +40,28 @@
 <a href="#40" id="40">40</a>
 <a href="#41" id="41">41</a>
 <a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
 </pre></div><pre class="rust"><code><span class="attr">#![no_std]
 #![no_main]
 #![feature(panic_info_message)]
 
 </span><span class="kw">use </span>core::arch::global_asm;
 
-<span class="attr">#[macro_use]
-</span><span class="kw">mod </span>console;
 
 <span class="kw">mod </span>lang_items;
 <span class="kw">mod </span>sbi;
+
+<span class="attr">#[macro_use]
+</span><span class="kw">mod </span>log;
+<span class="attr">#[macro_use]
+</span><span class="kw">mod </span>console;
 
 <span class="macro">global_asm!</span>(<span class="macro">include_str!</span>(<span class="string">"entry.asm"</span>));
 
 <span class="attr">#[no_mangle]
 </span><span class="kw">pub fn </span>rust_main() -&gt; ! {
     clear_bss();
-    <span class="macro">println!</span>(<span class="string">"Hello, world!"</span>);
     <span class="kw">extern </span><span class="string">"C" </span>{
         <span class="kw">fn </span>s_text();
         <span class="kw">fn </span>e_text();
@@ -65,11 +69,11 @@
         <span class="kw">fn </span>e_data();
     }
 
-    <span class="macro">log!</span>(info, <span class="string">".text [{:#x}, {:#x}]"</span>, s_text <span class="kw">as </span>usize, e_text <span class="kw">as </span>usize);
-    <span class="macro">log!</span>(debug, <span class="string">".rodata [{:#x}, {:#x}]"</span>, s_data <span class="kw">as </span>usize, e_data <span class="kw">as </span>usize);
-    <span class="macro">log!</span>(error, <span class="string">"test error"</span>);
+    <span class="macro">INFO!</span>(<span class="string">".text [{:#x}, {:#x}]"</span>, s_text <span class="kw">as </span>usize, e_text <span class="kw">as </span>usize);
+    <span class="macro">INFO!</span>(<span class="string">".rodata [{:#x}, {:#x}]"</span>, s_data <span class="kw">as </span>usize, e_data <span class="kw">as </span>usize);
+    <span class="macro">INFO!</span>(<span class="string">"test error {}"</span>, <span class="number">1</span>);
 
-    <span class="macro">panic!</span>(<span class="string">"shut down!"</span>);
+    <span class="macro">panic!</span>(<span class="string">"shutdown!"</span>);
 }
 
 <span class="kw">fn </span>clear_bss() {
